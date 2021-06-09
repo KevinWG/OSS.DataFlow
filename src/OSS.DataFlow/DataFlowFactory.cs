@@ -23,8 +23,8 @@ namespace OSS.DataFlow
         /// <returns></returns>
         public static IDataPublisher<TData> CreateFlow<TData>(string flowKey, IDataSubscriber<TData> subscriber,  DataFlowOption option=null) 
         {
-            var pusher = FlowProvider?.CreateFlow(subscriber, flowKey, option);
-            return pusher ?? new DefaultDataFlow<TData>(flowKey,subscriber, option);
+            var pusher = FlowProvider?.CreateFlow(flowKey, subscriber,  option);
+            return pusher ?? new InterDataFlow<TData>(flowKey,subscriber, option);
         }
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace OSS.DataFlow
         /// <returns></returns>
         public static IDataPublisher<TData> CreateFlow<TData>(string flowKey, Func<TData, Task<bool>> subscribeFunc, DataFlowOption option = null)
         {
-            var poper = new InterDataSubscriber<TData>(subscribeFunc);
+            var poper = new InterDataFuncSubscriber<TData>(subscribeFunc);
 
-            var pusher = FlowProvider?.CreateFlow(poper, flowKey, option);
-            return pusher ?? new DefaultDataFlow<TData>(flowKey,poper, option);
+            var pusher = FlowProvider?.CreateFlow(flowKey, poper,  option);
+            return pusher ?? new InterDataFlow<TData>(flowKey,poper, option);
         }
 
 
@@ -53,18 +53,13 @@ namespace OSS.DataFlow
         /// 创建单向数据发布者
         /// </summary>
         /// <typeparam name="TData"></typeparam>
-        /// <param name="flowKey"> 流key  </param>
+        /// <param name="publisherKey"> 流key  </param>
         /// <param name="option"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
-        public static IDataPublisher<TData> CreatePublisher<TData>( string flowKey,DataPublisherOption option=null)
+        public static IDataPublisher<TData> CreatePublisher<TData>(string publisherKey, DataPublisherOption option = null)
         {
-            var pusher = PublisherProvider?.CreatePublisher< TData>( flowKey, option);
-            if (pusher==null)
-            {
-                throw new NotImplementedException($"无法找到对应的{flowKey}值的 IDataFlowPublisherProvider 的具体实现");
-            }
-
-            return pusher;
+            var pusher = PublisherProvider?.CreatePublisher<TData>(publisherKey, option);
+            return pusher ?? new InterDataPublisher<TData>(publisherKey, option);
         }
 
 
@@ -72,19 +67,39 @@ namespace OSS.DataFlow
         /// 数据流订阅者的接收器
         /// </summary>
         public static IDataSubscriberReceiver SubscriberReceiver { get; set; }
-
+        
         /// <summary>
         /// 接收数据订阅者
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="subscriber"></param>
-        /// <param name="flowKey"> 流key  </param>
+        /// <param name="subscriberKey"> 流key  </param>
         /// <param name="option"></param>
         /// <returns> 是否接收成功 </returns>
-        public static bool ReceiveSubscriber<TData>(string flowKey, IDataSubscriber<TData> subscriber, 
-            DataFlowOption option = null)
+        public static void ReceiveSubscriber<TData>(string subscriberKey, IDataSubscriber<TData> subscriber, DataFlowOption option = null)
         {
-            return SubscriberReceiver?.Receive(subscriber, flowKey, option) ?? false;
+            if (SubscriberReceiver == null)
+            {
+                InterQueueHub.RegisterSubscriber(subscriberKey, subscriber);
+            }
+            else
+            {
+                SubscriberReceiver.Receive(subscriberKey, subscriber, option);
+            }
+        }
+
+        /// <summary>
+        /// 接收数据订阅者
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="subscribeFunc"></param>
+        /// <param name="subscriberKey"> 流key  </param>
+        /// <param name="option"></param>
+        /// <returns> 是否接收成功 </returns>
+        public static void ReceiveSubscriber<TData>(string subscriberKey, Func<TData, Task<bool>> subscribeFunc, DataFlowOption option = null)
+        {
+            var poper = new InterDataFuncSubscriber<TData>(subscribeFunc); 
+            ReceiveSubscriber(subscriberKey, poper,  option);
         }
     }
 

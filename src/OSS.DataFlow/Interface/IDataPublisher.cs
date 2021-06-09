@@ -15,5 +15,4 @@ namespace OSS.DataFlow
         /// <returns>是否推入成功</returns>
         Task<bool> Publish(TData data);
     }
-
 }

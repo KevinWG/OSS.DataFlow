@@ -13,7 +13,7 @@ namespace OSS.DataFlow
         private readonly IDataSubscriber<TData> _subscriber;
         internal InterDataSubscriberWrap(Func<TData, Task<bool>> subscribeFunc)
         {
-            _subscriber = new InterDataSubscriber<TData>(subscribeFunc);
+            _subscriber = new InterDataFuncSubscriber<TData>(subscribeFunc);
         }
 
         internal InterDataSubscriberWrap(IDataSubscriber<TData> subscribe)

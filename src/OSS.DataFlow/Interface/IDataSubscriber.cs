@@ -15,6 +15,4 @@ namespace OSS.DataFlow
         /// <returns>是否弹出成功</returns>
         Task<bool> Subscribe(TData data);
     }
-
-  
 }

@@ -6,20 +6,24 @@ namespace OSS.DataFlow
     ///  默认数据流
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    public class DefaultDataPublisher<TData> : IDataPublisher<TData>
+    internal class InterDataFlow<TData> : IDataPublisher<TData>
     {
-        private readonly string              _msgKey;
-        private readonly DataPublisherOption _option;
+        private readonly string _msgKey;
+        private readonly DataFlowOption _option;
 
         /// <summary>
         ///  构造函数
         /// </summary>
         /// <param name="msgFlowKey"></param>
+        /// <param name="subscriber"></param>
         /// <param name="option"></param>
-        public DefaultDataPublisher(string msgFlowKey,DataPublisherOption option)
+        public InterDataFlow(string msgFlowKey,IDataSubscriber<TData> subscriber,DataFlowOption option)
         {
             _msgKey = msgFlowKey;
             _option = option;
+
+            InterQueueHub.RegisterPublisher(option?.SourceName);
+            InterQueueHub.RegisterSubscriber(msgFlowKey, subscriber);
         }
 
         /// <summary>

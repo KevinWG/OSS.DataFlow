@@ -17,9 +17,9 @@ namespace OSS.DataFlow
        
         private static readonly ConcurrentDictionary<string, ISubscriberWrap> _keySubscriberMaps = new ConcurrentDictionary<string, ISubscriberWrap>();
 
-        public static Task<bool> Publish(string msgFlowKey, object msg, string sourceName)
+        public static Task<bool> Publish(string msgFlowKey, object msg,string sourcename)
         {
-            return Task.FromResult(GetQueue(sourceName).Post(new InterData()
+            return Task.FromResult(GetQueue(sourcename).Post(new InterData()
             {
                 flow_key = msgFlowKey, msg = msg
             }));
@@ -53,6 +53,8 @@ namespace OSS.DataFlow
                 return;
 
         }
+
+
 
         internal static void RegisterSubscriber<TData>(string msgFlowKey, IDataSubscriber<TData> subscriber)
         {

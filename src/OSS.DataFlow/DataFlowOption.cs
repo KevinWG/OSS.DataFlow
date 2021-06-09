@@ -13,8 +13,6 @@ namespace OSS.DataFlow
         /// </summary>
         public static DataFlowOption Default { get; } = new DataFlowOption();
         
-
-
         /// <summary>默认最大并发数</summary>
         private int _maxDegreeOfParallelism = 1;
 
@@ -66,7 +64,7 @@ namespace OSS.DataFlow
     public class DataPublisherOption
     {
         /// <summary>
-        ///  系统调用来源
+        /// 数据源名称
         /// </summary>
         public string SourceName { get; set; } = "default";
     }
