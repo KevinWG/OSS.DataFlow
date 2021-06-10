@@ -57,7 +57,6 @@ namespace OSS.DataFlow
 
             if (_sourceQueueMaps.TryAdd(sourceName, new ActionBlock<InterData>(InterSubscriber, options)))
                 return;
-
         }
 
 
