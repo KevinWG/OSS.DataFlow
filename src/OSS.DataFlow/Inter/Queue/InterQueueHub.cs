@@ -27,9 +27,15 @@ namespace OSS.DataFlow
 
         public static void InterSubscriber(InterData data)
         {
-            if (_keySubscriberMaps.TryGetValue(data.flow_key, out var subscriber))
+            try
             {
-                subscriber.Subscribe(data.msg);
+                if (_keySubscriberMaps.TryGetValue(data.flow_key, out var subscriber))
+                {
+                    subscriber.Subscribe(data.msg);
+                }
+            }
+            catch 
+            {
             }
         }
 
