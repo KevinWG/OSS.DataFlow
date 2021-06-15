@@ -25,13 +25,13 @@ namespace OSS.DataFlow
             }));
         }
 
-        public static void InterSubscriber(InterData data)
+        public static async Task InterSubscriber(InterData data)
         {
             try
             {
                 if (_keySubscriberMaps.TryGetValue(data.flow_key, out var subscriber))
                 {
-                    subscriber.Subscribe(data.msg);
+                   await subscriber.Subscribe(data.msg);
                 }
             }
             catch 
