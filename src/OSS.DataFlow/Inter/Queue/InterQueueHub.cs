@@ -11,10 +11,9 @@ namespace OSS.DataFlow
         {
             MaxDegreeOfParallelism = 32
         }; 
+
         private static readonly ActionBlock<InterData> _defaultDataQueue = new ActionBlock<InterData>(InterSubscriber, options);
-       
         private static readonly ConcurrentDictionary<string, ActionBlock<InterData>> _sourceQueueMaps = new ConcurrentDictionary<string, ActionBlock<InterData>>();
-       
         private static readonly ConcurrentDictionary<string, ISubscriberWrap> _keySubscriberMaps = new ConcurrentDictionary<string, ISubscriberWrap>();
 
         public static Task<bool> Publish(string msgFlowKey, object msg,string sourcename)
@@ -31,7 +30,7 @@ namespace OSS.DataFlow
             {
                 if (_keySubscriberMaps.TryGetValue(data.flow_key, out var subscriber))
                 {
-                   await subscriber.Subscribe(data.msg);
+                   await subscriber.Subscribe(data.msg).ConfigureAwait(false);
                 }
             }
             catch 
