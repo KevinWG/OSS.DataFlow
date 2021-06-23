@@ -10,9 +10,9 @@
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="subscriber"></param>
-        /// <param name="subscriberKey"> 流key  </param>
+        /// <param name="dataTypeKey"> 流key  </param>
         /// <param name="option"></param>
         /// <returns> 是否接收成功 </returns>
-        void Receive<TData>(string subscriberKey, IDataSubscriber<TData> subscriber,  DataFlowOption option = null);
+        void Receive<TData>(string dataTypeKey, IDataSubscriber<TData> subscriber,  DataFlowOption option = null);
     }
 }

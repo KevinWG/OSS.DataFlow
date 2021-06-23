@@ -13,6 +13,6 @@ namespace OSS.DataFlow
         /// </summary>
         /// <param name="data"></param>
         /// <returns>是否推入成功</returns>
-        Task<bool> Publish(TData data);
+        Task<bool> Publish( TData data);
     }
 }

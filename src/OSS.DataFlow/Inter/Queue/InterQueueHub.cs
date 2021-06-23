@@ -1,9 +1,10 @@
-﻿using System;
+﻿
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using OSS.DataFlow.Inter.Queue;
 
-namespace OSS.DataFlow
+namespace OSS.DataFlow.Inter.Queue
 {
     internal static class InterQueueHub
     {
@@ -12,33 +13,18 @@ namespace OSS.DataFlow
             MaxDegreeOfParallelism = 32
         }; 
 
-        private static readonly ActionBlock<InterData> _defaultDataQueue = new ActionBlock<InterData>(InterSubscriber, options);
-        private static readonly ConcurrentDictionary<string, ActionBlock<InterData>> _sourceQueueMaps = new ConcurrentDictionary<string, ActionBlock<InterData>>();
-        private static readonly ConcurrentDictionary<string, ISubscriberWrap> _keySubscriberMaps = new ConcurrentDictionary<string, ISubscriberWrap>();
-
+        private static readonly ActionBlock<InterData> _defaultDataQueue = new ActionBlock<InterData>(InterQueueSubscriber.InterSubscribe, options);
+       
+        private static readonly ConcurrentDictionary<string, ActionBlock<InterData>> _sourceDataQueueMaps = new ConcurrentDictionary<string, ActionBlock<InterData>>();
+      
         public static Task<bool> Publish(string msgFlowKey, object msg,string sourcename)
         {
             return Task.FromResult(GetQueue(sourcename).Post(new InterData()
             {
-                flow_key = msgFlowKey, msg = msg
+                data_type_key = msgFlowKey, msg = msg
             }));
         }
-
-        public static async Task InterSubscriber(InterData data)
-        {
-            try
-            {
-                if (_keySubscriberMaps.TryGetValue(data.flow_key, out var subscriber))
-                {
-                   await subscriber.Subscribe(data.msg).ConfigureAwait(false);
-                }
-            }
-            catch 
-            {
-            }
-        }
-
-
+        
         private static ActionBlock<InterData> GetQueue(string sourceName)
         {
             if (string.IsNullOrEmpty(sourceName))
@@ -46,40 +32,24 @@ namespace OSS.DataFlow
                 return _defaultDataQueue;
             }
 
-            return _sourceQueueMaps.TryGetValue(sourceName, out var q) ? q : _defaultDataQueue;
+            return _sourceDataQueueMaps.TryGetValue(sourceName, out var q) ? q : _defaultDataQueue;
         }
 
-        internal static void RegisterPublisher(string sourceName)
+        internal static void RegisterQueue(string sourceName)
         {
-            if (string.IsNullOrEmpty(sourceName) || _sourceQueueMaps.ContainsKey(sourceName))
+            if (string.IsNullOrEmpty(sourceName) || _sourceDataQueueMaps.ContainsKey(sourceName))
                 return;
 
-            if (_sourceQueueMaps.TryAdd(sourceName, new ActionBlock<InterData>(InterSubscriber, options)))
+            if (_sourceDataQueueMaps.TryAdd(sourceName, new ActionBlock<InterData>(InterQueueSubscriber.InterSubscribe, options)))
                 return;
         }
-
-
-
-        internal static void RegisterSubscriber<TData>(string msgFlowKey, IDataSubscriber<TData> subscriber)
-        {
-            if (_keySubscriberMaps.ContainsKey(msgFlowKey))
-            {
-                throw new ArgumentException($"消息流key：{msgFlowKey} 已被注册");
-            }
-
-            if (_keySubscriberMaps.TryAdd(msgFlowKey, new InterDataSubscriberWrap<TData>(subscriber)))
-                return;
-
-
-            throw new ArgumentException($"未能注册（{msgFlowKey} ）对应的消息订阅处理!");
-        }
-
+        
     }
 
 
     internal class InterData
     {
-        public string flow_key { get; set; }
+        public string data_type_key { get; set; }
 
         public object msg { get ; set; }
     }

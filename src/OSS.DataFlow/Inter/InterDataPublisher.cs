@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using OSS.DataFlow.Inter.Queue;
+using System.Threading.Tasks;
 
 namespace OSS.DataFlow
 {
@@ -8,20 +9,20 @@ namespace OSS.DataFlow
     /// <typeparam name="TData"></typeparam>
     internal class InterDataPublisher<TData> : IDataPublisher<TData>
     {
-        private readonly string              _msgKey;
         private readonly DataPublisherOption _option;
+        private readonly string              _dataTypeKey;
 
         /// <summary>
         ///  构造函数
         /// </summary>
-        /// <param name="msgPublisherKey"></param>
+        /// <param name="dataTypeKey"></param>
         /// <param name="option"></param>
-        public InterDataPublisher(string msgPublisherKey, DataPublisherOption option)
+        public InterDataPublisher(string dataTypeKey, DataPublisherOption option)
         {
-            _msgKey = msgPublisherKey;
-            _option = option;
+            _option      = option;
+            _dataTypeKey = dataTypeKey;
 
-            InterQueueHub.RegisterPublisher(option?.SourceName);
+            InterQueueHub.RegisterQueue(option?.SourceName);
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace OSS.DataFlow
         /// <returns></returns>
         public Task<bool> Publish(TData data)
         {
-            return InterQueueHub.Publish(_msgKey, data, _option?.SourceName);
+            return InterQueueHub.Publish(_dataTypeKey, data, _option?.SourceName);
         }
     }
 }

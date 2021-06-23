@@ -11,9 +11,9 @@ namespace OSS.DataFlow
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="subscriber"> 订阅者 </param>
-        /// <param name="flowKey"> 流key  </param>
+        /// <param name="flowDataTypeKey"> 流key  </param>
         /// <param name="option"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
-        IDataPublisher<TData> CreateFlow<TData>(string flowKey, IDataSubscriber<TData> subscriber,  DataFlowOption option=null);
+        IDataPublisher<TData> CreateFlow<TData>(string flowDataTypeKey, IDataSubscriber<TData> subscriber,  DataFlowOption option=null);
     }
 }

@@ -2,8 +2,11 @@
 
 namespace OSS.DataFlow
 {
-    public static class InterUtils
+    internal static class InterUtils
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static Task<bool> TrueTask => Task.FromResult(true);
     }
 }
