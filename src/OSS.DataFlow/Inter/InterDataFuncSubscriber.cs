@@ -11,7 +11,7 @@ namespace OSS.DataFlow
         {
             _subscriber = subscribeFunc ?? throw new ArgumentNullException(nameof(subscribeFunc), "订阅者方法不能为空！");
         }
-
+        
         public Task<bool> Subscribe(TData data)
         {
             return _subscriber.Invoke(data);
@@ -28,10 +28,10 @@ namespace OSS.DataFlow
     internal class InterDataSubscriberWrap<TData> : ISubscriberWrap
     {
         private readonly IDataSubscriber<TData> _subscriber;
-        internal InterDataSubscriberWrap(Func<TData, Task<bool>> subscribeFunc)
-        {
-            _subscriber = new InterDataFuncSubscriber<TData>(subscribeFunc);
-        }
+        //internal InterDataSubscriberWrap(Func<TData, Task<bool>> subscribeFunc)
+        //{
+        //    _subscriber = new InterDataFuncSubscriber<TData>(subscribeFunc);
+        //}
 
         internal InterDataSubscriberWrap(IDataSubscriber<TData> subscribe)
         {
