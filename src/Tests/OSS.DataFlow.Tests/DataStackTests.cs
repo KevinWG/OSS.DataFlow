@@ -40,14 +40,28 @@ namespace OSS.Tools.Tests.DataStack
         }
 
 
-        [TestMethod]
-        public async Task DataPublisherAndSubscriberTest()
-        {
-            var msgKey = "Publisher-Subscriber";
 
-            var publisher =
-                DataFlowFactory.CreatePublisher<MsgData>(msgKey, new DataPublisherOption() {SourceName = "NewSource"});
-            DataFlowFactory.ReceiveSubscriber<MsgData>(msgKey, async (data) =>
+
+
+        [TestMethod]
+        public async Task DataPublisherAndMultiSubscriberTest()
+        {
+            const string msgPSKey = "Publisher-Subscriber";
+            var publisher = DataFlowFactory.CreatePublisher<MsgData>(msgPSKey,
+                new DataPublisherOption()
+                {
+                    SourceName = "NewSource"
+                });
+
+
+            DataFlowFactory.ReceiveSubscriber<MsgData>(msgPSKey, async (data) =>
+            {
+                await Task.Delay(1000);
+                Assert.IsTrue(data.name == "test");
+                return true;
+            }, new DataFlowOption() {SourceName = "NewSource"});
+
+            DataFlowFactory.ReceiveSubscriber<MsgData>(msgPSKey, async (data) =>
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");

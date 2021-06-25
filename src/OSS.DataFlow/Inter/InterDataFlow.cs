@@ -8,8 +8,6 @@ namespace OSS.DataFlow
     /// <typeparam name="TData"></typeparam>
     internal class InterDataFlow<TData> : InterDataPublisher<TData>, IDataPublisher<TData>
     {
-        //private readonly DataFlowOption _option;
-        
         /// <summary>
         ///  构造函数
         /// </summary>
@@ -18,8 +16,6 @@ namespace OSS.DataFlow
         /// <param name="option"></param>
         public InterDataFlow(string flowDataTypeKey,IDataSubscriber<TData> subscriber,DataFlowOption option):base(flowDataTypeKey, option)
         {
-            //_option = option;
-            
             InterQueueSubscriber.RegisterSubscriber(flowDataTypeKey, subscriber);
         }
     }

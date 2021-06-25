@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
@@ -8,14 +6,16 @@ namespace OSS.DataFlow.Inter.Queue
 {
     internal static class InterQueueSubscriber
     {
-        private static readonly ConcurrentDictionary<string, ISubscriberWrap> _keySubscriberMaps = new ConcurrentDictionary<string, ISubscriberWrap>();
+        private static readonly ConcurrentDictionary<Type, InterSubscriberMultiHandler> _keySubscriberMaps =
+            new ConcurrentDictionary<Type, InterSubscriberMultiHandler>();
+
         public static async Task InterSubscribe(InterData data)
         {
             try
             {
-                if (_keySubscriberMaps.TryGetValue(data.data_type_key, out var subscriber))
+                if (_keySubscriberMaps.TryGetValue(data.msg.GetType(), out var subscriber))
                 {
-                    await subscriber.Subscribe(data.msg).ConfigureAwait(false);
+                    await subscriber.Subscribe(data.data_type_key, data.msg).ConfigureAwait(false);
                 }
             }
             catch
@@ -23,20 +23,20 @@ namespace OSS.DataFlow.Inter.Queue
             }
         }
 
-        internal static void RegisterSubscriber<TData>(string msgFlowKey, IDataSubscriber<TData> subscriber)
+        internal static bool RegisterSubscriber<TData>(string msgFlowKey, IDataSubscriber<TData> subscriber)
         {
-            if (_keySubscriberMaps.ContainsKey(msgFlowKey))
-            {
-                throw new ArgumentException($"消息流key：{msgFlowKey} 已被注册");
-            }
-
-            if (_keySubscriberMaps.TryAdd(msgFlowKey, new InterDataSubscriberWrap<TData>(subscriber)))
-                return;
-
-
-            throw new ArgumentException($"未能注册（{msgFlowKey} ）对应的消息订阅处理!");
+            _keySubscriberMaps.AddOrUpdate(typeof(TData), (t) =>
+                {
+                    var handler = new InterSubscriberMultiHandler();
+                    handler.RegisterSubscriber(msgFlowKey, new InterDataSubscriberWrap<TData>(subscriber));
+                    return handler;
+                },
+                (t, handler) =>
+                {
+                    handler.RegisterSubscriber(msgFlowKey, new InterDataSubscriberWrap<TData>(subscriber));
+                    return handler;
+                });
+            return true;
         }
-
-
     }
 }
