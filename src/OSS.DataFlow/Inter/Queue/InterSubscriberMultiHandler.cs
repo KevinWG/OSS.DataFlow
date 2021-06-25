@@ -50,7 +50,6 @@ namespace OSS.DataFlow.Inter.Queue
                 }
                 catch
                 {
-                    return false;
                 }
             }
             return true;
