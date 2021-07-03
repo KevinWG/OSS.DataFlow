@@ -9,9 +9,8 @@
         /// 创建单向数据发布者
         /// </summary>
         /// <typeparam name="TData"></typeparam>
-        /// <param name="dataTypeKey"></param>
         /// <param name="option"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
-        IDataPublisher<TData> CreatePublisher<TData>(string dataTypeKey,DataPublisherOption option = null);
+        IDataPublisher<TData> CreatePublisher<TData>(DataPublisherOption option = null);
     }
 }

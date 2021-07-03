@@ -11,8 +11,9 @@ namespace OSS.DataFlow
         /// <summary>
         /// 推进数据
         /// </summary>
+        /// <param name="dataKey"></param>
         /// <param name="data"></param>
         /// <returns>是否推入成功</returns>
-        Task<bool> Publish( TData data);
+        Task<bool> Publish(string dataKey,TData data);
     }
 }

@@ -54,15 +54,14 @@ namespace OSS.DataFlow
         /// 创建单向数据发布者
         /// </summary>
         /// <typeparam name="TData"></typeparam>
-        /// <param name="dataTypeKey"></param>
         /// <param name="option"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
-        public static IDataPublisher<TData> CreatePublisher<TData>(string dataTypeKey, DataPublisherOption option = null)
+        public static IDataPublisher<TData> CreatePublisher<TData>(DataPublisherOption option = null)
         {
-            var pusher = PublisherProvider?.CreatePublisher<TData>( dataTypeKey,option);
-            return pusher ?? new InterDataPublisher<TData>(dataTypeKey, option);
+            var pusher = PublisherProvider?.CreatePublisher<TData>(option);
+            return pusher ?? new InterDataPublisher<TData>(option);
         }
-
+    
 
         /// <summary>
         /// 数据流订阅者的接收器

@@ -10,17 +10,16 @@ namespace OSS.DataFlow
     internal class InterDataPublisher<TData> : IDataPublisher<TData>
     {
         private readonly DataPublisherOption _option;
-        private readonly string              _dataTypeKey;
+        //private readonly string              _dataTypeKey;
 
         /// <summary>
         ///  构造函数
         /// </summary>
-        /// <param name="dataTypeKey"></param>
         /// <param name="option"></param>
-        public InterDataPublisher(string dataTypeKey, DataPublisherOption option)
+        public InterDataPublisher(DataPublisherOption option)
         {
             _option      = option;
-            _dataTypeKey = dataTypeKey;
+            //_dataTypeKey = dataTypeKey;
 
             InterQueueHub.RegisterQueue(option?.SourceName);
         }
@@ -28,11 +27,12 @@ namespace OSS.DataFlow
         /// <summary>
         ///   发布数据
         /// </summary>
+        /// <param name="dataTypeKey"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task<bool> Publish(TData data)
+        public Task<bool> Publish(string dataTypeKey,TData data)
         {
-            return InterQueueHub.Publish(_dataTypeKey, data, _option?.SourceName);
+            return InterQueueHub.Publish(dataTypeKey, data, _option?.SourceName);
         }
     }
 }
