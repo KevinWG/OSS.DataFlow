@@ -22,7 +22,7 @@ namespace OSS.DataFlow
         /// <param name="flowDataTypeKey"> 流key ( 默认对应实现是 Task.Factory.StartNew 传递数据实现 ) </param>
         /// <param name="option"></param>
         /// <returns></returns>
-        public static IDataPublisher<TData> CreateFlow<TData>(string flowDataTypeKey, IDataSubscriber<TData> subscriber,  DataFlowOption option=null) 
+        public static IDataPublisher CreateFlow<TData>(string flowDataTypeKey, IDataSubscriber<TData> subscriber,  DataFlowOption option=null) 
         {
             var pusher = FlowProvider?.CreateFlow(flowDataTypeKey, subscriber,  option);
             return pusher ?? new InterDataFlow<TData>(flowDataTypeKey,subscriber, option);
@@ -36,7 +36,7 @@ namespace OSS.DataFlow
         /// <param name="flowDataTypeKey"> 流key ( 默认对应实现是 Task.Factory.StartNew 传递数据实现 ) </param>
         /// <param name="option"></param>
         /// <returns></returns>
-        public static IDataPublisher<TData> CreateFlow<TData>(string flowDataTypeKey, Func<TData, Task<bool>> subscribeFunc, DataFlowOption option = null)
+        public static IDataPublisher CreateFlow<TData>(string flowDataTypeKey, Func<TData, Task<bool>> subscribeFunc, DataFlowOption option = null)
         {
             var poper = new InterDataFuncSubscriber<TData>(subscribeFunc);
 
@@ -56,10 +56,10 @@ namespace OSS.DataFlow
         /// <typeparam name="TData"></typeparam>
         /// <param name="option"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
-        public static IDataPublisher<TData> CreatePublisher<TData>(DataPublisherOption option = null)
+        public static IDataPublisher CreatePublisher<TData>(DataPublisherOption option = null)
         {
             var pusher = PublisherProvider?.CreatePublisher<TData>(option);
-            return pusher ?? new InterDataPublisher<TData>(option);
+            return pusher ?? new InterDataPublisher(option);
         }
     
 

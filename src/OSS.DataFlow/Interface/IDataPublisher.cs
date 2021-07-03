@@ -5,8 +5,7 @@ namespace OSS.DataFlow
     /// <summary>
     ///  数据的发布者
     /// </summary>
-    /// <typeparam name="TData"></typeparam>
-    public interface IDataPublisher<in TData>
+    public interface IDataPublisher
     {
         /// <summary>
         /// 推进数据
@@ -14,6 +13,6 @@ namespace OSS.DataFlow
         /// <param name="dataKey"></param>
         /// <param name="data"></param>
         /// <returns>是否推入成功</returns>
-        Task<bool> Publish(string dataKey,TData data);
+        Task<bool> Publish<TData>(string dataKey,TData data);
     }
 }

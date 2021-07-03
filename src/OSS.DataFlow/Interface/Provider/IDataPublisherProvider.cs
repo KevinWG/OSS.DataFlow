@@ -11,6 +11,6 @@
         /// <typeparam name="TData"></typeparam>
         /// <param name="option"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
-        IDataPublisher<TData> CreatePublisher<TData>(DataPublisherOption option = null);
+        IDataPublisher CreatePublisher<TData>(DataPublisherOption option = null);
     }
 }

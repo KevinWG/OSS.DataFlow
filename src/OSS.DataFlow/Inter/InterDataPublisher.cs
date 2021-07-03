@@ -6,8 +6,7 @@ namespace OSS.DataFlow
     /// <summary>
     ///  默认发布者
     /// </summary>
-    /// <typeparam name="TData"></typeparam>
-    internal class InterDataPublisher<TData> : IDataPublisher<TData>
+    internal class InterDataPublisher : IDataPublisher
     {
         private readonly DataPublisherOption _option;
         //private readonly string              _dataTypeKey;
@@ -30,7 +29,7 @@ namespace OSS.DataFlow
         /// <param name="dataTypeKey"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task<bool> Publish(string dataTypeKey,TData data)
+        public Task<bool> Publish<TData>(string dataTypeKey,TData data)
         {
             return InterQueueHub.Publish(dataTypeKey, data, _option?.SourceName);
         }

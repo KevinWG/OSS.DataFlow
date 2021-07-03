@@ -6,7 +6,7 @@ namespace OSS.DataFlow
     ///  默认数据流
     /// </summary>
     /// <typeparam name="TData"></typeparam>
-    internal class InterDataFlow<TData> : InterDataPublisher<TData>, IDataPublisher<TData>
+    internal class InterDataFlow<TData> : InterDataPublisher
     {
         /// <summary>
         ///  构造函数
