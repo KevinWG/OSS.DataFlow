@@ -9,20 +9,20 @@ namespace OSS.Tools.Tests.DataStack
     public class DataStackTests
     {
 
-        private static readonly IDataPublisher<MsgData> _normalFlowPublisher =
+        private static readonly IDataPublisher _normalFlowPublisher =
             DataFlowFactory.CreateFlow("normal_flow", new MsgPoper());
 
         [TestMethod]
         public async Task DataStackTest()
         {
-            var pushRes = await _normalFlowPublisher.Publish(new MsgData() {name = "test"});
+            var pushRes = await _normalFlowPublisher.Publish("normal_flow",new MsgData() {name = "test"});
             Assert.IsTrue(pushRes);
 
             await Task.Delay(2000);
         }
 
 
-        private static readonly IDataPublisher<MsgData> _delegateFlowpusher = DataFlowFactory.CreateFlow<MsgData>(
+        private static readonly IDataPublisher _delegateFlowpusher = DataFlowFactory.CreateFlow<MsgData>(
             "delegate_flow",
             async (data) =>
             {
@@ -34,7 +34,7 @@ namespace OSS.Tools.Tests.DataStack
         [TestMethod]
         public async Task DataStackFuncTest()
         {
-            var pushRes = await _delegateFlowpusher.Publish(new MsgData() {name = "test"});
+            var pushRes = await _delegateFlowpusher.Publish("delegate_flow",new MsgData() {name = "test"});
             Assert.IsTrue(pushRes);
             await Task.Delay(2000);
         }
@@ -47,8 +47,7 @@ namespace OSS.Tools.Tests.DataStack
         public async Task DataPublisherAndMultiSubscriberTest()
         {
             const string msgPSKey = "Publisher-Subscriber";
-            var publisher = DataFlowFactory.CreatePublisher<MsgData>(msgPSKey,
-                new DataPublisherOption()
+            var publisher = DataFlowFactory.CreatePublisher<MsgData>(new DataPublisherOption()
                 {
                     SourceName = "NewSource"
                 });
@@ -68,7 +67,7 @@ namespace OSS.Tools.Tests.DataStack
                 return true;
             }, new DataFlowOption() {SourceName = "NewSource"});
 
-            var pushRes = await publisher.Publish(new MsgData() {name = "test"});
+            var pushRes = await publisher.Publish(msgPSKey,new MsgData() {name = "test"});
             Assert.IsTrue(pushRes);
 
             await Task.Delay(2000);
