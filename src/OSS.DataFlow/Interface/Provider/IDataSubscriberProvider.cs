@@ -3,7 +3,7 @@
     /// <summary>
     ///  数据流订阅者的接收器
     /// </summary>
-    public interface IDataSubscriberReceiver
+    public interface IDataSubscriberProvider
     {
         /// <summary>
         /// 接收数据订阅者

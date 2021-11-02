@@ -10,9 +10,18 @@ namespace OSS.DataFlow
     public static class DataFlowFactory
     {
         /// <summary>
-        /// 数据流的提供者
+        /// 自定义 数据流 发布/订阅 实现的 提供者
         /// </summary>
         public static IDataFlowProvider FlowProvider { get; set; }
+        /// <summary>
+        /// 自定义 数据流发布实现的 提供者
+        /// </summary>
+        public static IDataPublisherProvider PublisherProvider { get; set; }
+        /// <summary>
+        /// 自定义 数据流订阅实现的 提供者
+        /// </summary>
+        public static IDataSubscriberProvider SubscriberProvider { get; set; }
+
 
         /// <summary>
         ///  创建数据流
@@ -22,7 +31,7 @@ namespace OSS.DataFlow
         /// <param name="flowDataTypeKey"> 流key ( 默认对应实现是 Task.Factory.StartNew 传递数据实现 ) </param>
         /// <param name="option"></param>
         /// <returns></returns>
-        public static IDataPublisher CreateFlow<TData>(string flowDataTypeKey, IDataSubscriber<TData> subscriber,  DataFlowOption option=null) 
+        public static IDataPublisher RegisterFlow<TData>(string flowDataTypeKey, IDataSubscriber<TData> subscriber,  DataFlowOption option=null) 
         {
             var pusher = FlowProvider?.RegisterFlow(flowDataTypeKey, subscriber,  option);
             return pusher ?? new InterDataFlow<TData>(flowDataTypeKey,subscriber, option);
@@ -45,11 +54,7 @@ namespace OSS.DataFlow
         }
 
 
-        /// <summary>
-        /// 数据流的提供者
-        /// </summary>
-        public static IDataPublisherProvider PublisherProvider { get; set; }
-
+  
         /// <summary>
         /// 创建单向数据发布者
         /// </summary>
@@ -61,15 +66,12 @@ namespace OSS.DataFlow
             var pusher = PublisherProvider?.RegisterPublisher<TData>(option);
             return pusher ?? new InterDataPublisher(option);
         }
-    
+        
 
-        /// <summary>
-        /// 数据流订阅者的接收器
-        /// </summary>
-        public static IDataSubscriberReceiver SubscriberReceiver { get; set; }
+
         
         /// <summary>
-        /// 接收数据订阅者
+        /// 注册 接收数据订阅者
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="subscriber"></param>
@@ -78,25 +80,25 @@ namespace OSS.DataFlow
         /// <returns> 是否接收成功 </returns>
         public static void RegisterSubscriber<TData>(string dataTypeKey, IDataSubscriber<TData> subscriber, DataFlowOption option = null)
         {
-            if (SubscriberReceiver == null)
+            if (SubscriberProvider == null)
             {
                 InterQueueSubscriber.RegisterSubscriber(dataTypeKey, subscriber);
             }
             else
             {
-                SubscriberReceiver.RegisterSubscriber(dataTypeKey, subscriber, option);
+                SubscriberProvider.RegisterSubscriber(dataTypeKey, subscriber, option);
             }
         }
 
         /// <summary>
-        /// 接收数据订阅者
+        /// 注册 接收数据订阅者
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="subscribeFunc"></param>
         /// <param name="dataTypeKey"> 流key  </param>
         /// <param name="option"></param>
         /// <returns> 是否接收成功 </returns>
-        public static void ReceiveSubscriber<TData>(string dataTypeKey, Func<TData, Task<bool>> subscribeFunc, DataFlowOption option = null)
+        public static void RegisterSubscriber<TData>(string dataTypeKey, Func<TData, Task<bool>> subscribeFunc, DataFlowOption option = null)
         {
             var poper = new InterDataFuncSubscriber<TData>(subscribeFunc); 
             RegisterSubscriber(dataTypeKey, poper,  option);

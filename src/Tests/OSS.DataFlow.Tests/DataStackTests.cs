@@ -10,7 +10,7 @@ namespace OSS.Tools.Tests.DataStack
     {
 
         private static readonly IDataPublisher _normalFlowPublisher =
-            DataFlowFactory.CreateFlow("normal_flow", new MsgPoper());
+            DataFlowFactory.RegisterFlow("normal_flow", new MsgPoper());
 
         [TestMethod]
         public async Task DataStackTest()
