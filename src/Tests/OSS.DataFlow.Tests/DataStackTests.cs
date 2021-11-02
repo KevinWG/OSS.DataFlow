@@ -22,7 +22,7 @@ namespace OSS.Tools.Tests.DataStack
         }
 
 
-        private static readonly IDataPublisher _delegateFlowpusher = DataFlowFactory.CreateFlow<MsgData>(
+        private static readonly IDataPublisher _delegateFlowpusher = DataFlowFactory.RegisterFlow<MsgData>(
             "delegate_flow",
             async (data) =>
             {
@@ -47,7 +47,7 @@ namespace OSS.Tools.Tests.DataStack
         public async Task DataPublisherAndMultiSubscriberTest()
         {
             const string msgPSKey = "Publisher-Subscriber";
-            var publisher = DataFlowFactory.CreatePublisher<MsgData>(new DataPublisherOption()
+            var publisher = DataFlowFactory.RegisterPublisher<MsgData>(new DataPublisherOption()
                 {
                     SourceName = "NewSource"
                 });
