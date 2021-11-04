@@ -53,14 +53,14 @@ namespace OSS.Tools.Tests.DataStack
                 });
 
 
-            DataFlowFactory.ReceiveSubscriber<MsgData>(msgPSKey, async (data) =>
+            DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");
                 return true;
             }, new DataFlowOption() {SourceName = "NewSource"});
 
-            DataFlowFactory.ReceiveSubscriber<MsgData>(msgPSKey, async (data) =>
+            DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");
