@@ -6,7 +6,7 @@ using OSS.DataFlow;
 namespace OSS.Tools.Tests.DataStack
 {
     [TestClass]
-    public class DataStackTests
+    public class DataFlowTests
     {
 
         private static readonly IDataPublisher _normalFlowPublisher =

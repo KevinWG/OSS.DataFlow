@@ -3,40 +3,18 @@
 namespace OSS.DataFlow.Event
 {
     /// <summary>
-    ///  事件处理器
+    /// 事件处理器
     /// </summary>
-    /// <typeparam name="TIn"></typeparam>
-    /// <typeparam name="TOut"></typeparam>
-    public abstract class FlowEventProcessor<TIn, TOut>
+    /// <typeparam name="TIn">输入参数类型</typeparam>
+    /// <typeparam name="TOut">输出参数类型</typeparam>
+    public class FlowEventProcessor<TIn, TOut> : InternalBaseFlowEventProcessor<TIn, TOut>
     {
-        #region 消息通信发布订阅者
-
-        private readonly string         _msgKey;
-        private readonly IDataPublisher _publisher;
-
-        private async Task<bool> subscriber(FlowEventInput<TIn> eventData)
-        {
-            await InterProcess(eventData);
-            return true;
-        }
-
-        #endregion
-
-
-        private readonly EventProcessOption    _option;
         private readonly IFlowEvent<TIn, TOut> _event;
 
-        /// <summary>
-        /// 事件处理器
-        /// </summary>
-        /// <param name="eventInstance">事件实例</param>
-        /// <param name="option">事件处理选项</param>
-        public FlowEventProcessor(IFlowEvent<TIn, TOut> eventInstance, EventProcessOption option)
+        /// <inheritdoc />
+        public FlowEventProcessor(IFlowEvent<TIn, TOut> eventInstance, FlowEventOption option) : base(option)
         {
-            _event  = eventInstance;
-            _option = option;
-
-            _publisher = DataFlowFactory.RegisterFlow<FlowEventInput<TIn>>(_option.event_msg_key, subscriber);
+            _event = eventInstance;
         }
 
         /// <summary>
@@ -52,49 +30,60 @@ namespace OSS.DataFlow.Event
             });
         }
 
-
-        internal async Task<TOut> InterProcess(FlowEventInput<TIn> eventData)
+        internal override Task<TOut> InterEventExecute(TIn input)
         {
-            var interRes = await InterLoopProcessing(eventData.input);
-            if (interRes.is_success)
-                return interRes.result;
-
-            eventData.circulated_times += 1;
-            if (eventData.circulated_times <= _option.retry_times)
-                await _publisher.Publish(_msgKey, eventData);
-            else
-                await _event.Failed(eventData.input);
-            
-            return interRes.result;
+            return _event.Execute(input);
         }
-
-
-        internal async Task<EventProcessResp<TOut>> InterLoopProcessing(TIn input)
+        internal override Task InterEventFailed(TIn input)
         {
-            var  interLoopTimes = 0;
-            bool needRetry;
-            do
-            {
-                try
-                {
-                    needRetry = false;
-                    return new EventProcessResp<TOut>(true, await _event.Execute(input)); //await Execute(data);
-                }
-                catch
-                {
-                    needRetry      =  true;
-                    interLoopTimes += 1;
-                }
-
-            } while (needRetry && interLoopTimes <= _option.loop_times);
-
-            return new EventProcessResp<TOut>(false, default);
+            return _event.Failed(input);
         }
     }
 
+    /// <summary>
+    /// 事件处理器
+    /// </summary>
+    /// <typeparam name="TIn">输入参数类型</typeparam>
+    public class FlowEventProcessor<TIn> : InternalBaseFlowEventProcessor<TIn, Empty>
+    {
+        private readonly IFlowEvent<TIn> _event;
+
+        /// <inheritdoc />
+        public FlowEventProcessor(IFlowEvent<TIn> eventInstance, FlowEventOption option) : base(option)
+        {
+            _event = eventInstance;
+        }
+
+        /// <summary>
+        ///  执行
+        /// </summary>
+        /// <param name="input">输入参数</param>
+        /// <returns></returns>
+        public Task Process(TIn input)
+        {
+            return InterProcess(new FlowEventInput<TIn>()
+            {
+                input = input
+            });
+        }
+
+        internal override async Task<Empty> InterEventExecute(TIn input)
+        {
+            await _event.Execute(input);
+            return Empty.Default;
+        }
+        internal override Task InterEventFailed(TIn input)
+        {
+            return _event.Failed(input);
+        }
+    }
+
+
+
+
     internal readonly struct EventProcessResp<TOut>
     {
-        public bool is_success { get;  }
+        public bool is_success { get; }
 
         public EventProcessResp(bool isSuccess, TOut res)
         {
@@ -105,6 +94,6 @@ namespace OSS.DataFlow.Event
         /// <summary>
         ///  返回结果
         /// </summary>
-        public TOut result { get;  }
+        public TOut result { get; }
     }
 }

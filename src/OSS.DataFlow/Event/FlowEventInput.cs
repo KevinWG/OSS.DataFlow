@@ -9,7 +9,7 @@
         /// <summary>
         ///  循环执行次数
         /// </summary>
-        public int circulated_times { get; set; }
+        public int circulate_times { get; set; }
 
 
         /// <summary>
