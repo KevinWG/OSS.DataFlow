@@ -16,7 +16,7 @@ namespace OSS.DataFlow
         /// <param name="option"></param>
         public InterDataFlow(string flowDataTypeKey,IDataSubscriber<TData> subscriber,DataFlowOption option):base(option)
         {
-            InterQueueSubscriber.RegisterSubscriber(flowDataTypeKey, subscriber);
+            InterQueueConsumer.RegisterSubscriber(flowDataTypeKey, subscriber);
         }
     }
 }

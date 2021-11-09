@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace OSS.DataFlow.Inter.Queue
 {
-    internal static class InterQueueSubscriber
+    internal static class InterQueueConsumer
     {
-        private static readonly ConcurrentDictionary<Type, InterSubscriberMultiHandler> _keySubscriberMaps =
-            new ConcurrentDictionary<Type, InterSubscriberMultiHandler>();
+        private static readonly ConcurrentDictionary<Type, InterQueueConsumerMultiHandler> _keySubscriberMaps =
+            new ConcurrentDictionary<Type, InterQueueConsumerMultiHandler>();
 
-        public static async Task InterSubscribe(InterData data)
+        public static async Task InterConsumer(InterData data)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace OSS.DataFlow.Inter.Queue
         {
             _keySubscriberMaps.AddOrUpdate(typeof(TData), (t) =>
                 {
-                    var handler = new InterSubscriberMultiHandler();
+                    var handler = new InterQueueConsumerMultiHandler();
                     handler.RegisterSubscriber(msgFlowKey, new InterDataSubscriberWrap<TData>(subscriber));
                     return handler;
                 },

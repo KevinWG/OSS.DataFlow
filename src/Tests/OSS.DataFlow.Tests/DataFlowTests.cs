@@ -9,7 +9,7 @@ namespace OSS.Tools.Tests.DataStack
     public class DataFlowTests
     {
 
-        private static readonly IDataPublisher _normalFlowPublisher =
+        private static readonly IDataPublisher _normalFlowPublisher = 
             DataFlowFactory.RegisterFlow("normal_flow", new MsgPoper());
 
         [TestMethod]
@@ -57,7 +57,8 @@ namespace OSS.Tools.Tests.DataStack
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");
-                return true;
+                // DoSomething(data)   // 功能实现
+                return true;// 消费成功
             }, new DataFlowOption() {SourceName = "NewSource"});
 
             DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>

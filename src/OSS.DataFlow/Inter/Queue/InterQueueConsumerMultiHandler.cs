@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OSS.DataFlow.Inter.Queue
 {
-    internal class InterSubscriberMultiHandler
+    internal class InterQueueConsumerMultiHandler
     {
 
         private Dictionary<string, IList<ISubscriberWrap>>

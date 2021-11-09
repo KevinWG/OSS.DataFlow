@@ -82,7 +82,7 @@ namespace OSS.DataFlow
         {
             if (SubscriberProvider == null)
             {
-                InterQueueSubscriber.RegisterSubscriber(dataTypeKey, subscriber);
+                InterQueueConsumer.RegisterSubscriber(dataTypeKey, subscriber);
             }
             else
             {

@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using OSS.DataFlow.Inter.Queue;
 
 namespace OSS.DataFlow.Inter.Queue
 {
@@ -13,7 +12,7 @@ namespace OSS.DataFlow.Inter.Queue
             MaxDegreeOfParallelism = 32
         }; 
 
-        private static readonly ActionBlock<InterData> _defaultDataQueue = new ActionBlock<InterData>(InterQueueSubscriber.InterSubscribe, options);
+        private static readonly ActionBlock<InterData> _defaultDataQueue = new ActionBlock<InterData>(InterQueueConsumer.InterConsumer, options);
        
         private static readonly ConcurrentDictionary<string, ActionBlock<InterData>> _sourceDataQueueMaps = new ConcurrentDictionary<string, ActionBlock<InterData>>();
       
@@ -40,7 +39,7 @@ namespace OSS.DataFlow.Inter.Queue
             if (string.IsNullOrEmpty(sourceName) || _sourceDataQueueMaps.ContainsKey(sourceName))
                 return;
 
-            if (_sourceDataQueueMaps.TryAdd(sourceName, new ActionBlock<InterData>(InterQueueSubscriber.InterSubscribe, options)))
+            if (_sourceDataQueueMaps.TryAdd(sourceName, new ActionBlock<InterData>(InterQueueConsumer.InterConsumer, options)))
                 return;
         }
         
