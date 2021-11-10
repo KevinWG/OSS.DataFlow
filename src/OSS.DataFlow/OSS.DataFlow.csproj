@@ -2,9 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.6.2</Version>
-    <PackageReleaseNotes>简化创建发布者</PackageReleaseNotes>
-    <Description>数据的流动传递发布者订阅者封装，使用 System.Threading.Tasks.Dataflow 作为默认的队列实现</Description>
+    <Version>1.7</Version>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>OSS.Dataflow主要实现异步消息传递的过程抽象，提供消息发布订阅的统一抽象接口，在业务功能之间，完成消息的流式处理，具体消息存储触发实现（默认提供了进程内的队列实现）和业务调用无关。并在此之上实现事件消息的重复投放逻辑，建立事件执行的容错补充机制。</Description>
+    <RepositoryUrl>https://github.com/KevinWG/OSS.DataFlow</RepositoryUrl>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageIconUrl />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -13,6 +16,13 @@
 
   <ItemGroup>
     <PackageReference Include="System.Threading.Tasks.Dataflow" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
