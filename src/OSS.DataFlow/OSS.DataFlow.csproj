@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.6</Version>
-    <PackageReleaseNotes>优化流体内部处理机制</PackageReleaseNotes>
+    <Version>1.6.1</Version>
+    <PackageReleaseNotes>简化创建发布者</PackageReleaseNotes>
     <Description>数据的流动传递发布者订阅者封装，使用 System.Threading.Tasks.Dataflow 作为默认的队列实现</Description>
   </PropertyGroup>
 

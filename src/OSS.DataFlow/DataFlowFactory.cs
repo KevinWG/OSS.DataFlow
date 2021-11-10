@@ -13,12 +13,11 @@ namespace OSS.DataFlow
         /// <summary>
         /// 创建单向数据发布者
         /// </summary>
-        /// <typeparam name="TData"></typeparam>
         /// <param name="option"></param>
         /// <returns> 返回当前流的发布接口实现 </returns>
-        public static IDataPublisher CreatePublisher<TData>(DataPublisherOption option = null)
+        public static IDataPublisher CreatePublisher(DataPublisherOption option = null)
         {
-            var pusher = DataFlowManager.PublisherProvider?.CreatePublisher<TData>(option);
+            var pusher = DataFlowManager.PublisherProvider?.CreatePublisher(option);
             return pusher ?? new InterDataPublisher(option);
         }
 
