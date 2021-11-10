@@ -29,7 +29,7 @@ namespace OSS.DataFlow.Event
         public InternalBaseFlowEventProcessor(FlowEventOption option)
         {
             _option    = option;
-            _publisher = DataFlow.RegisterFlow<FlowEventInput<TIn>>(_option.event_msg_key, subscriber);
+            _publisher = DataFlowFactory.RegisterFlow<FlowEventInput<TIn>>(_option.event_msg_key, subscriber);
         }
 
         internal async Task<TOut> InterProcess(FlowEventInput<TIn> eventData)

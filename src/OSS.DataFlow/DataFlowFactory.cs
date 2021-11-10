@@ -6,7 +6,7 @@ namespace OSS.DataFlow
     /// <summary>
     ///  数据流创建者
     /// </summary>
-    public static class DataFlow
+    public static class DataFlowFactory
     {
         #region 独立处理发布者
 

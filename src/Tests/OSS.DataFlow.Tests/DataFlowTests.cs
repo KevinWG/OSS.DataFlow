@@ -10,7 +10,7 @@ namespace OSS.Tools.Tests.DataStack
     {
 
         private static readonly IDataPublisher _normalFlowPublisher =
-            DataFlow.DataFlow.RegisterFlow("normal_flow", new MsgPoper());
+            DataFlow.DataFlowFactory.RegisterFlow("normal_flow", new MsgPoper());
 
         [TestMethod]
         public async Task DataStackTest()
@@ -24,7 +24,7 @@ namespace OSS.Tools.Tests.DataStack
 
 
 
-        private static readonly IDataPublisher _delegateFlowpusher = DataFlow.DataFlow.RegisterFlow<MsgData>(
+        private static readonly IDataPublisher _delegateFlowpusher = DataFlow.DataFlowFactory.RegisterFlow<MsgData>(
             "delegate_flow",
             async (data) =>
             {
@@ -49,13 +49,13 @@ namespace OSS.Tools.Tests.DataStack
         public async Task DataPublisherAndMultiSubscriberTest()
         {
             const string msgPSKey = "Publisher-Subscriber";
-            var publisher = DataFlow.DataFlow.CreatePublisher<MsgData>(new DataPublisherOption()
+            var publisher = DataFlow.DataFlowFactory.CreatePublisher<MsgData>(new DataPublisherOption()
                 {
                     SourceName = "NewSource"
                 });
 
 
-            DataFlow.DataFlow.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
+            DataFlow.DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");
@@ -63,7 +63,7 @@ namespace OSS.Tools.Tests.DataStack
                 return true;// 消费成功
             });
 
-            DataFlow.DataFlow.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
+            DataFlow.DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");
