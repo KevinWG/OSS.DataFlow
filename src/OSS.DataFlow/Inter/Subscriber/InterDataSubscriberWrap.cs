@@ -1,13 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿
+using System.Threading.Tasks;
 
 namespace OSS.DataFlow
 {
-    internal interface ISubscriberWrap
-    {
-        Task<bool> Subscribe(object data);
-    }
-
-
     internal class InterDataSubscriberWrap<TData> : ISubscriberWrap
     {
         private readonly IDataSubscriber<TData> _subscriber;
@@ -23,7 +18,12 @@ namespace OSS.DataFlow
 
         Task<bool> ISubscriberWrap.Subscribe(object data)
         {
-            return _subscriber.Subscribe((TData)data);
+            return _subscriber.Subscribe((TData) data);
         }
+    }
+
+    internal interface ISubscriberWrap
+    {
+        Task<bool> Subscribe(object data);
     }
 }

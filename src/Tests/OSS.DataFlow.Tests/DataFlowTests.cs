@@ -9,8 +9,8 @@ namespace OSS.Tools.Tests.DataStack
     public class DataFlowTests
     {
 
-        private static readonly IDataPublisher _normalFlowPublisher = 
-            DataFlowFactory.RegisterFlow("normal_flow", new MsgPoper());
+        private static readonly IDataPublisher _normalFlowPublisher =
+            DataFlow.DataFlow.RegisterFlow("normal_flow", new MsgPoper());
 
         [TestMethod]
         public async Task DataStackTest()
@@ -22,7 +22,9 @@ namespace OSS.Tools.Tests.DataStack
         }
 
 
-        private static readonly IDataPublisher _delegateFlowpusher = DataFlowFactory.RegisterFlow<MsgData>(
+
+
+        private static readonly IDataPublisher _delegateFlowpusher = DataFlow.DataFlow.RegisterFlow<MsgData>(
             "delegate_flow",
             async (data) =>
             {
@@ -47,26 +49,26 @@ namespace OSS.Tools.Tests.DataStack
         public async Task DataPublisherAndMultiSubscriberTest()
         {
             const string msgPSKey = "Publisher-Subscriber";
-            var publisher = DataFlowFactory.RegisterPublisher<MsgData>(new DataPublisherOption()
+            var publisher = DataFlow.DataFlow.CreatePublisher<MsgData>(new DataPublisherOption()
                 {
                     SourceName = "NewSource"
                 });
 
 
-            DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
+            DataFlow.DataFlow.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");
                 // DoSomething(data)   // 功能实现
                 return true;// 消费成功
-            }, new DataFlowOption() {SourceName = "NewSource"});
+            });
 
-            DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
+            DataFlow.DataFlow.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>
             {
                 await Task.Delay(1000);
                 Assert.IsTrue(data.name == "test");
                 return true;
-            }, new DataFlowOption() {SourceName = "NewSource"});
+            });
 
             var pushRes = await publisher.Publish(msgPSKey,new MsgData() {name = "test"});
             Assert.IsTrue(pushRes);

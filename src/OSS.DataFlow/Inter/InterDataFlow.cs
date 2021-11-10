@@ -1,6 +1,4 @@
-﻿using OSS.DataFlow.Inter.Queue;
-
-namespace OSS.DataFlow
+﻿namespace OSS.DataFlow
 {
     /// <summary>
     ///  默认数据流
@@ -16,7 +14,7 @@ namespace OSS.DataFlow
         /// <param name="option"></param>
         public InterDataFlow(string flowDataTypeKey,IDataSubscriber<TData> subscriber,DataFlowOption option):base(option)
         {
-            InterQueueConsumer.RegisterSubscriber(flowDataTypeKey, subscriber);
+            DataFlowManager.RegisterSubscriber(flowDataTypeKey, subscriber);
         }
     }
 }
