@@ -51,7 +51,7 @@ namespace OSS.Tools.Tests.DataStack
             const string msgPSKey = "Publisher-Subscriber";
             var publisher = DataFlowFactory.CreatePublisher(new DataPublisherOption()
                 {
-                    SourceName = "NewSource"
+                    source_name = "NewSource"
                 });
 
             DataFlowFactory.RegisterSubscriber<MsgData>(msgPSKey, async (data) =>

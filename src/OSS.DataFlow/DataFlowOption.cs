@@ -66,6 +66,6 @@ namespace OSS.DataFlow
         /// <summary>
         /// 数据源名称
         /// </summary>
-        public string SourceName { get; set; } = "default";
+        public string source_name { get; set; } = "default";
     }
 }

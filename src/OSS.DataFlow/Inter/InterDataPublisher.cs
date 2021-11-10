@@ -9,7 +9,6 @@ namespace OSS.DataFlow
     internal class InterDataPublisher : IDataPublisher
     {
         private readonly DataPublisherOption _option;
-        //private readonly string              _dataTypeKey;
 
         /// <summary>
         ///  构造函数
@@ -18,9 +17,7 @@ namespace OSS.DataFlow
         public InterDataPublisher(DataPublisherOption option)
         {
             _option      = option;
-            //_dataTypeKey = dataTypeKey;
-
-            InterQueueHub.RegisterQueue(option?.SourceName);
+            InterQueueHub.RegisterQueue(option?.source_name);
         }
 
         /// <summary>
@@ -31,7 +28,7 @@ namespace OSS.DataFlow
         /// <returns></returns>
         public Task<bool> Publish<TData>(string dataTypeKey,TData data)
         {
-            return InterQueueHub.Publish(dataTypeKey, data, _option?.SourceName);
+            return InterQueueHub.Publish(dataTypeKey, data, _option?.source_name);
         }
     }
 }

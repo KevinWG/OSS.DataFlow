@@ -15,12 +15,11 @@ namespace OSS.Tools.Tests.DataStack
             var o = new FlowEventOption()
             {
                 event_msg_key = "Test_flow_event_msg",
-                flow_retry_times = 4,
-                func_retry_times = 1
+                flow_retry_times = 4, // 经过消息流重试次数
+                func_retry_times = 1  //  当前执行方法内部直接串联循环重试次数
             };
             var flowProcessor = new FlowEventProcessor<TestCount,TestCount>(new TestEvent(), o);
-
-
+            
             var countPara    = new TestCount() {count = 0};
 
             var countRes = await flowProcessor.Process(countPara);
@@ -34,7 +33,7 @@ namespace OSS.Tools.Tests.DataStack
         
     }
 
-
+    // 具体执行事件
     public class TestEvent:IFlowEvent<TestCount, TestCount>
     {
         public Task<TestCount> Execute(TestCount input)
@@ -53,9 +52,6 @@ namespace OSS.Tools.Tests.DataStack
              return Task.CompletedTask;
         }
     }
-
-
-
     public class TestCount
     {
         public int count { get; set; }

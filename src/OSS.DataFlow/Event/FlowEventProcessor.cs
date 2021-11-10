@@ -80,20 +80,4 @@ namespace OSS.DataFlow.Event
 
 
 
-
-    internal readonly struct EventProcessResp<TOut>
-    {
-        public bool is_success { get; }
-
-        public EventProcessResp(bool isSuccess, TOut res)
-        {
-            is_success = isSuccess;
-            result     = res;
-        }
-
-        /// <summary>
-        ///  返回结果
-        /// </summary>
-        public TOut result { get; }
-    }
 }

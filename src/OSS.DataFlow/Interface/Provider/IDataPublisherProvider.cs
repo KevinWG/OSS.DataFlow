@@ -6,10 +6,10 @@
     public interface IDataPublisherProvider
     {
         /// <summary>
-        /// 创建单向数据发布者
+        /// 数据发布者
         /// </summary>
         /// <param name="option"></param>
-        /// <returns> 返回当前流的发布接口实现 </returns>
-        IDataPublisher CreatePublisher(DataPublisherOption option = null);
+        /// <returns> 返回消息发布接口实现 </returns>
+        IDataPublisher CreatePublisher(DataPublisherOption option);
     }
 }

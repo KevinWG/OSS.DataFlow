@@ -9,17 +9,9 @@ namespace OSS.DataFlow
     public static class DataFlowManager
     {
         /// <summary>
-        /// 自定义 数据流 发布/订阅 实现的 提供者
-        /// </summary>
-        public static IDataFlowProvider FlowProvider { get; set; }
-
-        /// <summary>
-        /// 自定义 数据流发布实现的 提供者
+        /// 自定义 数据流发布（存储）实现的 提供者
         /// </summary>
         public static IDataPublisherProvider PublisherProvider { get; set; }
-
-
-        private readonly static InterSubscriberHandler _subscriberHandler = new InterSubscriberHandler();
 
         /// <summary>
         ///  通过自定义消息触发机制通知订阅者
@@ -32,7 +24,8 @@ namespace OSS.DataFlow
         {
             return _subscriberHandler.NotifySubscriber(msgDataKey, msgData);
         }
-        
+
+        private readonly static InterSubscriberHandler _subscriberHandler = new InterSubscriberHandler();
         //  注册订阅者
         internal static bool RegisterSubscriber<TData>(string msgFlowKey, IDataSubscriber<TData> subscriber)
         {

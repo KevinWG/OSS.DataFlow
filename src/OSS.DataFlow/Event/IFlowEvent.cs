@@ -38,7 +38,7 @@ namespace OSS.DataFlow.Event
         Task<TOut> Execute(TIn input);
 
         /// <summary>
-        ///   失败方法
+        ///   最终失败执行方法
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

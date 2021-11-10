@@ -49,7 +49,6 @@ namespace OSS.DataFlow
         {
             var subscriber = new InterDataFuncSubscriber<TData>(subscribeFunc);
             RegisterSubscriber(dataTypeKey, subscriber);
-
             return subscriber;
         }
 
@@ -70,8 +69,8 @@ namespace OSS.DataFlow
         public static IDataPublisher RegisterFlow<TData>(string flowDataTypeKey, IDataSubscriber<TData> subscriber,
             DataFlowOption option = null)
         {
-            return DataFlowManager.FlowProvider?.RegisterFlow(flowDataTypeKey, subscriber, option)
-                   ?? new InterDataFlow<TData>(flowDataTypeKey, subscriber, option);
+            DataFlowManager.RegisterSubscriber(flowDataTypeKey, subscriber);
+            return CreatePublisher(option);
         }
 
         /// <summary>

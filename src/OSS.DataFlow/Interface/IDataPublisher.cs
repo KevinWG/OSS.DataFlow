@@ -8,7 +8,7 @@ namespace OSS.DataFlow
     public interface IDataPublisher
     {
         /// <summary>
-        /// 推进数据
+        /// 推进数据(存储具体消息队列或者数据库实现)
         /// </summary>
         /// <param name="dataKey"></param>
         /// <param name="data"></param>
