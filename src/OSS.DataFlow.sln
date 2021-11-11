@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.DataFlow", "OSS.DataFlow\OSS.DataFlow.csproj", "{890E6F76-818E-4316-883A-7616AEEACFD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSS.DataFlow.Tests", "Tests\OSS.DataFlow.Tests\OSS.DataFlow.Tests.csproj", "{30BF855F-0F76-41B3-BC90-816EABFA917D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.DataFlow.Tests", "Tests\OSS.DataFlow.Tests\OSS.DataFlow.Tests.csproj", "{30BF855F-0F76-41B3-BC90-816EABFA917D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AE49DAF1-5DC1-4CEC-BD74-59005A9FFC8B}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
