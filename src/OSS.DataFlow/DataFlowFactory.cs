@@ -67,7 +67,7 @@ namespace OSS.DataFlow
         /// <param name="option"></param>
         /// <returns></returns>
         public static IDataPublisher RegisterFlow<TData>(string flowDataTypeKey, IDataSubscriber<TData> subscriber,
-            DataFlowOption option = null)
+            DataPublisherOption option = null)
         {
             DataFlowManager.RegisterSubscriber(flowDataTypeKey, subscriber);
             return CreatePublisher(option);
@@ -81,7 +81,7 @@ namespace OSS.DataFlow
         /// <param name="flowDataTypeKey"> 流key ( 默认对应实现是 Task.Factory.StartNew 传递数据实现 ) </param>
         /// <param name="option"></param>
         /// <returns></returns>
-        public static IDataPublisher RegisterFlow<TData>(string flowDataTypeKey, Func<TData, Task<bool>> subscribeFunc, DataFlowOption option = null)
+        public static IDataPublisher RegisterFlow<TData>(string flowDataTypeKey, Func<TData, Task<bool>> subscribeFunc, DataPublisherOption option = null)
         {
             var subscriber = new InterDataFuncSubscriber<TData>(subscribeFunc);
             return RegisterFlow(flowDataTypeKey, subscriber, option);

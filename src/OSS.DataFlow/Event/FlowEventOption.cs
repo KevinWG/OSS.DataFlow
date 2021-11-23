@@ -23,7 +23,7 @@
         /// <summary>
         ///  消息流的可选项
         /// </summary>
-        public DataFlowOption flow_option { get; set; } 
+        public DataPublisherOption flow_option { get; set; } 
     }
 
     /// <summary>
